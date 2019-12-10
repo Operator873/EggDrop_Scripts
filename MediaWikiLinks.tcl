@@ -87,7 +87,7 @@ bind pub f "'log" ::MW::Log
 proc ::MW::Link {nick host hand chan text} {
         set text [split $text]
         set project [lindex $text 0]
-        if {[lsearch -nocase $::MW::lang $project] >= "0" && [lsearch -nocase $::MW::exchan $chan] < 0} {
+        if {[lsearch -nocase $::MW::lang $project] >= 0 && [lsearch -nocase $::MW::exchan $chan] < 0} {
                 set linkstring [string map {{ } {_}} [lrange $text 1 end]]
                 putserv "PRIVMSG $chan :https://$project.$::MW::domain/wiki/$linkstring"
         } elseif {[lsearch -nocase $::MW::exchan $chan] < 0} {
@@ -99,10 +99,10 @@ proc ::MW::Link {nick host hand chan text} {
 proc ::MW::Contribs {nick host hand chan text} {
         set text [split $text]
         set project [lindex $text 0]
-        if {[lsearch -nocase $::MW::lang $project] >= "0" && ![lsearch -nocase $::MW::exchan $chan]} {
+        if {[lsearch -nocase $::MW::lang $project] >= 0 && [lsearch -nocase $::MW::exchan $chan] < 0} {
                 set target [string map {{ } {_}} [lrange $text 1 end]]
                 putserv "PRIVMSG $chan :https://$project.$::MW::domain/wiki/Special:Contributions/$target"
-        } elseif {![lsearch -nocase $::MW::exchan $chan]} {
+        } elseif {[lsearch -nocase $::MW::exchan $chan] < 0} {
                 set target [string map {{ } {_}} [lrange $text 0 end]]
                 putserv "PRIVMSG $chan :https://$::MW::def.$::MW::domain/wiki/Special:Contributions/$target"
         }
@@ -111,10 +111,10 @@ proc ::MW::Contribs {nick host hand chan text} {
 proc ::MW::Block {nick host hand chan text} {
         set text [split $text]
         set project [lindex $text 0]
-        if {[lsearch -nocase $::MW::lang $project] >= 0 && ![lsearch -nocase $::MW::exchan $chan]} {
+        if {[lsearch -nocase $::MW::lang $project] >= 0 && [lsearch -nocase $::MW::exchan $chan] < 0} {
                 set target [string map {{ } {_}} [lrange $text 1 end]]
                 putserv "PRIVMSG $chan :https://$project.$::MW::domain/wiki/Special:Block/$target"
-        } elseif {![lsearch -nocase $::MW::exchan $chan]} {
+        } elseif {[lsearch -nocase $::MW::exchan $chan] < 0} {
                 set target [string map {{ } {_}} [lrange $text 0 end]]
                 putserv "PRIVMSG $chan :https://$::MW::def.$::MW::domain/wiki/Special:Block/$target"
         }
@@ -123,10 +123,10 @@ proc ::MW::Block {nick host hand chan text} {
 proc ::MW::Log {nick host hand chan text} {
         set text [split $text]
         set project [lindex $text 0]
-        if {[lsearch -nocase $::MW::lang $project] >= 0 && ![lsearch -nocase $::MW::exchan $chan]} {
+        if {[lsearch -nocase $::MW::lang $project] >= 0 && [lsearch -nocase $::MW::exchan $chan] < 0} {
                 set target [string map {{ } {_}} [lrange $text 1 end]]
                 putserv "PRIVMSG $chan :User logs: https://$project.$::MW::domain/wiki/Special:Log/$target"
-        } elseif {![lsearch -nocase $::MW::exchan $chan]} {
+        } elseif {[lsearch -nocase $::MW::exchan $chan] < 0} {
                 set target [string map {{ } {_}} [lrange $text 0 end]]
                 putserv "PRIVMSG $chan :User logs: https://$::MW::def.$::MW::domain/wiki/Special:Log/$target"
         }
@@ -134,20 +134,20 @@ proc ::MW::Log {nick host hand chan text} {
 
 proc ::MW::ipintel {nick host hand chan text} {
         set target [string map {{ } {_}} [lrange [split $text] 0 end]]
-        if {![lsearch $::MW::exchan $chan]} {
+        if {[lsearch -nocase $::MW::exchan $chan] < 0} {
                 putserv "PRIVMSG $chan :WHOIS Lookup https://tools.wmflabs.org/whois/gateway.py?lookup=true&ip=$target"         }
 }
 
 proc ::MW::udc {nick host hand chan text} {
         set target [string map {{ } {+}} [lrange [join [split $text]] 0 end]]
-        if {![lsearch $::MW::exchan $chan]} {
+        if {[lsearch -nocase $::MW::exchan $chan] < 0} {
                 putserv "PRIVMSG $chan :Urban Dictionary lookup: https://www.urbandictionary.com/define.php?term=$target"
         }
 }
 
 proc ::MW::Google {nick host hand chan text} {
         set search [string map {{ } {+}} [lrange [join [split $text]] 0 end]]
-        if {![lsearch $::MW::exchan $chan]} {
+        if {[lsearch -nocase $::MW::exchan $chan] < 0} {
                 putserv "PRIVMSG $chan :Google results: https://www.google.com/search?q=$search"
         }
 }
