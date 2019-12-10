@@ -159,7 +159,7 @@ proc ::MW::Google {nick host hand chan text} {
         }
 }
 
-if {$::MW::domain == "example.com" || $::MW::lang == "subdomain1 subdomain2 subdomain3" || $::MW::def == "default"} {           putlog "You didn't configure MediaWiki Link Generator..."
+if {$::MW::domain == "example.com" || $::MW::lang == "subdomain1 subdomain2 subdomain3" || $::MW::def == "default"} {
         die "You didn't configure MediaWiki Link Generator..."
 }
 
