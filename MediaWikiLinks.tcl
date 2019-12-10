@@ -84,6 +84,13 @@ bind pub f "'log" ::MW::Log
 
 }
 
+#####################################
+#        Below is the coding.       #
+# If you edit this, and don't know  #
+# what you're doing, you can break  #
+# the script.                       #
+#####################################
+
 proc ::MW::Link {nick host hand chan text} {
         set text [split $text]
         set project [lindex $text 0]
