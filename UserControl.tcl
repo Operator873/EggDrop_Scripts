@@ -144,13 +144,15 @@ proc ::MWUser::Level {userTgtHand userTarget nick chan} {
 		if {[matchattr $userTgtHand n]} {
 		  putserv "PRIVMSG $chan :\002\00304$userTarget\002 is owner of this bot.\00304"
 		} elseif {[matchattr $userTgtHand x]} {
-		  putserv "PRIVMSG $chan :\002\00304$userTarget\002 \003is a SuperUser of this bot."
+		  putserv "PRIVMSG $chan :\002\00304$userTarget\002 \003has $::MWUser::L5 access."
 		} elseif {[matchattr $userTgtHand o]} {
-		  putserv "PRIVMSG $chan :\002\00304$userTarget\002 \003has WMF admin and Channel Operator access."
+		  putserv "PRIVMSG $chan :\002\00304$userTarget\002 \003has $::MWUser::L4 access."
 		} elseif {[matchattr $userTgtHand l]} {
-		  putserv "PRIVMSG $chan :\002\00303$userTarget\002 \003has WMF admin access."
+		  putserv "PRIVMSG $chan :\002\00303$userTarget\002 \003has $::MWUser::L3 access."
+		} elseif {[matchattr $userTgtHand v]} {
+		  putserv "PRIVMSG $chan :\002\00303$userTarget\002 \003has $::MWUser::L2 access."
 		} elseif {[matchattr $userTgtHand f]} {
-		  putserv "PRIVMSG $chan :\002\00303$userTarget\002 \003has Wikipedian access."
+		  putserv "PRIVMSG $chan :\002\00303$userTarget\002 \003has $::MWUser::L1 access."
 		} elseif {[matchattr $userTgtHand h]} {
 		  putserv "PRIVMSG $chan :$userTarget has been added to the userfile, but has no flags set."
 		} elseif {[matchattr $userTgtHand k]} {
