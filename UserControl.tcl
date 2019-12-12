@@ -128,7 +128,7 @@ proc ::MWUser::Add {userTarget userMask nick chan} {
 		adduser $userTarget $userMask
 		putlog "$nick added $userTarget to userfile."
 		putserv "PRIVMSG $chan :\002\00303Success!\002\00303 \003$userTarget was added to userfile as handle: $userTarget using hostmask: $userMask"
-    if {$::MWUser::newlevel = "false"} {
+    if {$::MWUser::newlevel == "false"} {
 		  putserv "PRIVMSG $chan :\002\00304$nick,\002 I recommend you use .user <nick> give <accesslevel> immediately."
     } else {
       chattr $userTarget -h+f
