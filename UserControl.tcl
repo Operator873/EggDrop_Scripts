@@ -73,7 +73,7 @@ namespace eval ::MWUser {
 # Set the *HANDLE* of the bot's owner. The Handle is the nick in the EggDrop userfile.
 # Since you're editing the config file, I assume this is probably you. Join the bot's partyline
 # and type .match YourNick to verify the bot knows you as your main nick.
-variable owner "YourNick"
+variable Owner "YourNick"
 
 # User Add behavior
 #
@@ -305,7 +305,8 @@ proc ::MWUser::Control {nick host hand chan text} {
     "delete" {
       [::MWUser::Delete $userAction $userTarget $nick $chan]
     }
- }
+  }
+}
  
  
  if {$::MWUser::Owner == "YourNick" && $::MWUser::L1 == "Level1"} {
