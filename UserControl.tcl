@@ -281,31 +281,39 @@ proc ::MWUser::Control {nick host hand chan text} {
 	set nickHand [nick2hand $nick]
   switch $userAction {
     "add" {
-      [::MWUser::Add $userTarget $userMask $nick $chan]
+      ::MWUser::Add $userTarget $userMask $nick $chan
     }
     
     "level" {
-      [::MWUser::Level $userTgtHand $userTarget $nick $chan]
+      ::MWUser::Level $userTgtHand $userTarget $nick $chan
     }
     
     "identify" {
-      [::MWUser::Identify $userTgtHand $userTarget $chan]
+      if {![validuser $userTgtHand]} {
+	putserv "PRIVMSG $chan :\002\00304Error!\002\00304 \003$nick, you must first add $userTarget to the userfile.\003"
+      } else {
+        ::MWUser::Identify $userTgtHand $userTarget $chan
+      }
     }
     
     "give" {
-      [::MWUser::Give $userAction $userLevel $userTarget $userOpChannel $userTgtHand $nickHand $nick $chan]
+      if {![validuser $userTgtHand]} {
+	putserv "PRIVMSG $chan :\002\00304Error!\002\00304 \003$nick, you must first add $userTarget to the userfile.\003"
+      } else {
+        ::MWUser::Give $userAction $userLevel $userTarget $userOpChannel $userTgtHand $nickHand $nick $chan
+      }
     }
     
     "remove" {
-      [::MWUser::Remove $userAction $userLevel $userTarget $userOpChannel $userTgtHand $nickHand $nick $chan]
+      ::MWUser::Remove $userAction $userLevel $userTarget $userOpChannel $userTgtHand $nickHand $nick $chan
     }
     
     "ban" {
-      [::MWUser::Ban $userAction $userTarget $userMask $nick $chan]
+      ::MWUser::Ban $userAction $userTarget $userMask $nick $chan
     }
     
     "delete" {
-      [::MWUser::Delete $userAction $userTarget $nick $chan]
+      ::MWUser::Delete $userAction $userTarget $nick $chan
     }
   }
 }
