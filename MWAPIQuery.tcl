@@ -31,7 +31,7 @@ variable Projects "foo bar"
 #
 # If the subdomain isn't specified in the command, what subdomain should be the default?
 # Ex: "en"
-variable defProject "foo"
+variable defProject "def"
 
 # API location
 #
@@ -75,8 +75,8 @@ tls::init -tls1 true -ssl2 false -ssl3 false
 
 # Call all other functions in an convient single command
 proc ::MWAPI::backlog {nick host hand chan text} {
-  global botnick
-  if {$botnick eq "CabalBot"} {
+	global botnick
+	if {$botnick eq "CabalBot"} {
 		::MWAPI::QD $nick $host $hand $chan $text
 		::MWAPI::rfd $nick $host $hand $chan $text
 		::MWAPI::unblk $nick $host $hand $chan $text
@@ -85,33 +85,39 @@ proc ::MWAPI::backlog {nick host hand chan text} {
 
 # Query MW API for unblock requests
 proc ::MWAPI::unblk {nick host hand chan text} {
-  set  [lindex [split $text] 0]
+	set projchk [lindex [split $text] 0]
 	set time [clock format [clock seconds] -format "%D %H:%M:%S CT"]
-  if {[lsearch $::MWAPI::Projects $projchk] => 0} {
-	  set wiki "https://$projchk.$::MWAPI::URL"
+	if {[lsearch $::MWAPI::Projects $projchk] => 0} {
+		set wiki "https://$projchk.$::MWAPI::URL"
+	} elseif {$projchk ne ""} {
+		putserv "PRIVMSG $chan :I don't know that project."
+	} else {
+		set wiki "https://$::MWAPI::defProject.$::MWAPI::URL"
+	}
 	set query [http::formatQuery action query format json list categorymembers cmtitle Category:Requests_for_unblock]
 	set Data1 [http::data [http::geturl $wiki -query $query -timeout 5000]]
 	set Data1 [::json::json2dict $Data1]
-	set apilog [open scripts/api_log/queries.txt {RDWR APPEND}]
-	puts $apilog "$nick checked unblock requests on $chan at $time with results:"
+	# debugging log --> set apilog [open scripts/api_log/queries.txt {RDWR APPEND}]
+	# debugging log --> puts $apilog "$nick checked unblock requests on $chan at $time with results:"
 	catch [set check [dict get $Data1 query categorymembers]] 4
 	if {$check ne ""} {
-	putserv "PRIVMSG $chan :Current unblock requests on SEWP:"
-	lmap item [dict get $Data1 query categorymembers] {
+		putserv "PRIVMSG $chan :Current unblock requests on $projchk:"
+		lmap item [dict get $Data1 query categorymembers] {
 		dict filter $item key title
 	}
 	foreach item [dict get $Data1 query categorymembers] {
 		dict with item {
 			set title [string map {{ } {_}} $title]
-			putserv "PRIVMSG $chan :https://simple.wikipedia.org/wiki/$title"
-			puts $apilog "$title"
+			putserv "PRIVMSG $chan :https://$projchk.$::MWAPI::Domain/wiki/$title"
+			# debugging entry --> puts $apilog "$title"
 		}
 	}
 	} else {
-		putserv "PRIVMSG $chan :There are no unblock requests at this time."
-		puts $apilog "None pending."
+		putserv "PRIVMSG $chan :There are no unblock requests on $projchk at this time."
+		# debugging entry --> puts $apilog "None pending."
 	}
-	close $apilog
+	# debugging entry --> close $apilog
 	http::cleanup $Data1
 	unset Data1
 }
+
