@@ -1,0 +1,6 @@
+{
+  "testwikii": {
+    "apiurl": "https://simple.wikipedia.org/w/api.php",
+    "csdcat": "Category:Quick deletion requests"
+  }
+}
