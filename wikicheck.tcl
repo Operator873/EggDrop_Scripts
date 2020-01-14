@@ -68,10 +68,11 @@ set dataFile [::json::json2dict [read $readFile]]
 close $readFile
 
 proc ::MWCheck::CSD {nick host hand chan text} {
+	global dataFile
 	set time [clock format [clock seconds] -format "%D %H:%M:%S CT"]
-  set project [lindex [split $text] 0]
+	set project [lindex [split $text] 0]
 	set wiki [dict get $dataFile $project apiurl]
-  set category [dict get $dataFile $project csdcat]
+	set category [dict get $dataFile $project csdcat]
 	set query [http::formatQuery action query format json list categorymembers cmtitle $category]
 	set Data1 [http::data [http::geturl $wiki -query $query -timeout 5000]]
 	set Data1 [::json::json2dict $Data1]
