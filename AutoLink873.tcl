@@ -36,10 +36,6 @@ bind pub - "!setlink" ::MWAutoLink::AutoLinkSwitch
 variable url "https://$::MWAutoLink::lang.$::MWAutoLink::proj/wiki/"
 }
 
-
-bind pubm - "*\[\[*\]\]*" Oper:AutoLink
-bind pub l "!setlink" Oper:AutoLinkSwitch
-
 proc ::MWAutoLink::AutoLinkSwitch {nick host hand chan text} {
 	set flip [lindex [split $text] 0]
 	switch $flip {
