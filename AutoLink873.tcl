@@ -31,9 +31,11 @@ variable proj "wikipedia.org"
 ##################################################
 
 bind pubm - "*\[\[*\]\]*" ::MWAutoLink::AutoLink
+bind pubm - "*\{\{*\}\}*" ::MWAutoLink::AutoTempLink
 bind pub - "!setlink" ::MWAutoLink::AutoLinkSwitch
 
 variable url "https://$::MWAutoLink::lang.$::MWAutoLink::proj/wiki/"
+
 }
 
 proc ::MWAutoLink::AutoLinkSwitch {nick host hand chan text} {
@@ -67,7 +69,7 @@ proc ::MWAutoLink::AutoLink {nick host hand chan text} {
 		set linkString [string map {{ } {_}} $linkString]
 		set linkString [join $linkString]
 		if {$linkString ne ""} {
-			putserv "PRIVMSG $chan: $::MWAutoLink::url$linkString"
+			putserv "PRIVMSG $chan :$::MWAutoLink::url$linkString"
 		}
 	}
 }
